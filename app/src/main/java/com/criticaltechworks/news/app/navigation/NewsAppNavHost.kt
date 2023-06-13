@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.criticaltechworks.news.core.ui.UiEvent
-import com.criticaltechworks.news.feature.headlines.headlinesScreen
+import com.criticaltechworks.news.feature.articles.headlinesScreen
 
 @Composable
 fun NewsAppNavHost(

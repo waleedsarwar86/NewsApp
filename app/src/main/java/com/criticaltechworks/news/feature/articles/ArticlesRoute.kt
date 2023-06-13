@@ -1,4 +1,4 @@
-package com.criticaltechworks.news.feature.headlines
+package com.criticaltechworks.news.feature.articles
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,19 +8,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.criticaltechworks.news.core.ui.UiEvent
 
 @Composable
-fun HeadlinesRoute(
+fun ArticlesRoute(
     modifier: Modifier = Modifier,
-    viewModel: HeadlinesViewModel = hiltViewModel(),
+    viewModel: ArticlesViewModel = hiltViewModel(),
     handleEvent: (UiEvent) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    FoldersScreen(
+    ArticlesScreen(
         uiState = uiState,
         modifier = modifier,
         handleEvent = { uiEvent ->
             when (uiEvent) {
-                is HeadlinesUiEvent -> {
+                is ArticlesUiEvent -> {
                 }
 
                 else -> {
@@ -31,10 +30,3 @@ fun HeadlinesRoute(
     )
 }
 
-@Composable
-internal fun FoldersScreen(
-    uiState: HeadlinesUiState,
-    modifier: Modifier = Modifier,
-    handleEvent: (UiEvent) -> Unit,
-) {
-}

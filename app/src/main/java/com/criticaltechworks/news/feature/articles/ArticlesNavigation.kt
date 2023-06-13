@@ -1,4 +1,4 @@
-package com.criticaltechworks.news.feature.headlines
+package com.criticaltechworks.news.feature.articles
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -12,6 +12,6 @@ fun NavController.navigateToHeadlines() {
 
 fun NavGraphBuilder.headlinesScreen(handleEvent: (UiEvent) -> Unit) {
     composable(HEADLINES_ROUTE) {
-        HeadlinesRoute(handleEvent = handleEvent)
+        ArticlesRoute(handleEvent = handleEvent)
     }
 }
