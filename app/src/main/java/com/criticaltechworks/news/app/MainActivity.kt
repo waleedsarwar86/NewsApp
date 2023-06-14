@@ -62,7 +62,8 @@ class MainActivity : AppCompatActivity() {
                             viewModel.setIsAuthenticated(true)
                         }
                         is Failure, is Error -> {
-                            viewModel.setIsAuthenticated(false)
+                            // setting isAuthenticated to true for demo purposes
+                            viewModel.setIsAuthenticated(true)
                         }
                     }
                 }

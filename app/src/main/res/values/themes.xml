@@ -12,7 +12,7 @@
     </style>
 
     <style name="Theme.NewsApp.Splash" parent="NightAdjusted.Theme.Splash">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
         <item name="postSplashScreenTheme">@style/Theme.NewsApp</item>
     </style>
 </resources>

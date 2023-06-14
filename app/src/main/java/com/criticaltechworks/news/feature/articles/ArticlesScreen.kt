@@ -49,7 +49,7 @@ internal fun ArticlesScreen(
     state: ArticlesUiState,
     handleEvent: (UiEvent) -> Unit,
 
-) {
+    ) {
     val snackbarHostState = remember { SnackbarHostState() }
     state.message?.let { message ->
         LaunchedEffect(message) {
@@ -131,17 +131,19 @@ internal fun ArticleList(
 fun ArticleItem(index: Int, article: Article, handleEvent: (UiEvent) -> Unit) {
     ListItem(
         leadingContent = {
-            AsyncImage(
-                model = Builder(LocalContext.current)
-                    .data(article.image)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(56.dp, 56.dp)
-                    .clip(shape = MaterialTheme.shapes.small),
-            )
+            if (article.image != null) {
+                AsyncImage(
+                    model = Builder(LocalContext.current)
+                        .data(article.image)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(56.dp, 56.dp)
+                        .clip(shape = MaterialTheme.shapes.small),
+                )
+            }
         },
         headlineText = { Text(text = article.title, style = MaterialTheme.typography.bodyMedium) },
         supportingText = {

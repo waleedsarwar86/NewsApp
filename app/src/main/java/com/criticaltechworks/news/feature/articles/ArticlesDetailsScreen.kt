@@ -61,10 +61,11 @@ fun ArticleDetailsScreen(
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(innerPadding)
                 .padding(16.dp),
-            ) {
-            HeaderImage(state.image)
-            Spacer(Modifier.height(16.dp))
-
+        ) {
+            if (state.image != null) {
+                HeaderImage(state.image)
+                Spacer(Modifier.height(16.dp))
+            }
             Text(text = state.title, style = MaterialTheme.typography.headlineLarge)
             Spacer(Modifier.height(8.dp))
             if (state.description != null) {

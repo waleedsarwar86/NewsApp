@@ -47,10 +47,12 @@ android {
     flavorDimensions "default"
     productFlavors {
         bbc {
+            applicationIdSuffix ".bbc"
             buildConfigField "String", "NEWS_SOURCE", NEWS_SOURCE_BBC_NEWS
         }
 
         bloomberg {
+            applicationIdSuffix ".bloomberg"
             buildConfigField "String", "NEWS_SOURCE", NEWS_SOURCE_BLOOMBERG
         }
     }
