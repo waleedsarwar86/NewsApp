@@ -2,6 +2,7 @@ package com.criticaltechworks.news.core.remote.retrofit
 
 import okhttp3.Request
 import okio.Timeout
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -24,14 +25,39 @@ class ResultCall<T>(private val delegate: Call<T>) :
                             ),
                         )
                     } else {
-                        callback.onResponse(
-                            this@ResultCall,
-                            Response.success(
-                                Result.failure(
-                                    HttpException(response),
+                        val errorBodyString = response.errorBody()?.string()
+
+                        if (errorBodyString != null) {
+                            try {
+                                val message = JSONObject(errorBodyString).getString("message")
+                                callback.onResponse(
+                                    this@ResultCall,
+                                    Response.success(
+                                        Result.failure(
+                                            Exception(message, HttpException(response)),
+                                        ),
+                                    ),
+                                )
+                            } catch (e: Exception) {
+                                callback.onResponse(
+                                    this@ResultCall,
+                                    Response.success(
+                                        Result.failure(
+                                            HttpException(response),
+                                        ),
+                                    ),
+                                )
+                            }
+                        } else {
+                            callback.onResponse(
+                                this@ResultCall,
+                                Response.success(
+                                    Result.failure(
+                                        HttpException(response),
+                                    ),
                                 ),
-                            ),
-                        )
+                            )
+                        }
                     }
                 }
 
