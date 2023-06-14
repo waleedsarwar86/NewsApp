@@ -18,11 +18,10 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(MainActivityUiState())
     val uiState: StateFlow<MainActivityUiState> = _uiState.asStateFlow()
 
-    init {
+    fun setIsAuthenticated(isAuthenticated: Boolean) {
         viewModelScope.launch {
-            delay(100)
             _uiState.update {
-                it.copy(isLoading = false)
+                it.copy(isAuthenticated = isAuthenticated)
             }
         }
     }
