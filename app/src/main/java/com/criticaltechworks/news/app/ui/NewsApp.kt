@@ -16,6 +16,8 @@ fun NewsApp(
     appState: NewsAppState,
 ) {
     NewsAppNavHost(
+        windowSizeClass = appState.windowSizeClass,
+        displayFeatures = appState.displayFeatures,
         navController = appState.navController,
         startDestination = startDestination,
         handleEvent = { handleEvent(uiEvent = it, appState) },

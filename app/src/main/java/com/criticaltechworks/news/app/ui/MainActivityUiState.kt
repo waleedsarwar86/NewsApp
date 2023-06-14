@@ -1,8 +1,8 @@
 package com.criticaltechworks.news.app.ui
 
-import com.criticaltechworks.news.feature.articles.HEADLINES_ROUTE
+import com.criticaltechworks.news.feature.articles.ARTICLES_ROUTE
 
 data class MainActivityUiState(
     val isLoading: Boolean = true,
-    val startDestination: String = HEADLINES_ROUTE,
+    val startDestination: String = ARTICLES_ROUTE,
 )

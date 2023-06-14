@@ -1,17 +1,23 @@
 package com.criticaltechworks.news.feature.articles
 
-import androidx.navigation.NavController
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.window.layout.DisplayFeature
 import com.criticaltechworks.news.core.ui.UiEvent
 
-const val HEADLINES_ROUTE = "headlines"
-fun NavController.navigateToHeadlines() {
-    this.navigate(HEADLINES_ROUTE)
-}
+const val ARTICLES_ROUTE = "articles"
 
-fun NavGraphBuilder.headlinesScreen(handleEvent: (UiEvent) -> Unit) {
-    composable(HEADLINES_ROUTE) {
-        ArticlesRoute(handleEvent = handleEvent)
+fun NavGraphBuilder.articlesScreen(
+    windowSizeClass: WindowSizeClass,
+    displayFeatures: List<DisplayFeature>,
+    handleEvent: (UiEvent) -> Unit,
+) {
+    composable(ARTICLES_ROUTE) {
+        ArticlesRoute(
+            windowSizeClass = windowSizeClass,
+            displayFeatures = displayFeatures,
+            handleEvent = handleEvent,
+        )
     }
 }

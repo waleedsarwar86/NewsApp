@@ -7,8 +7,12 @@ data class ArticlesUiState(
     val message: UiMessage? = null,
     val isLoading: Boolean = false,
     val articles: List<Article> = emptyList(),
+    val selectedArticleIndex: Int = 0,
+    val isArticleDetailOpen: Boolean = false,
 
-) {
+    ) {
+    val selectedArticle: Article?
+        get() = articles.getOrNull(selectedArticleIndex)
     companion object {
         val Empty = ArticlesUiState()
     }

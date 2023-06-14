@@ -29,16 +29,22 @@ class ArticlesViewModel @Inject constructor(
     private val event: MutableSharedFlow<UiEvent> = MutableSharedFlow()
     private val uiMessageManager = UiMessageManager()
     private val articles = MutableStateFlow(listOf<Article>())
+    private val selectedArticleIndex = MutableStateFlow(0)
+    private val isArticleDetailOpen = MutableStateFlow(false)
 
     val uiState: StateFlow<ArticlesUiState> = combine(
         uiMessageManager.message,
         getNewsArticles.inProgress,
         articles,
-    ) { message, isLoading, articles ->
+        selectedArticleIndex,
+        isArticleDetailOpen,
+    ) { message, isLoading, articles, selectedArticleIndex, isArticleDetailOpen ->
         ArticlesUiState(
             message = message,
             isLoading = isLoading,
             articles = articles,
+            selectedArticleIndex = selectedArticleIndex,
+            isArticleDetailOpen = isArticleDetailOpen,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -47,6 +53,7 @@ class ArticlesViewModel @Inject constructor(
     )
 
     init {
+        collectUiEvents()
         viewModelScope.launch {
             getNewsArticles(newsSource).fold(
                 onSuccess = {
@@ -58,6 +65,29 @@ class ArticlesViewModel @Inject constructor(
                     uiMessageManager.emitMessage(UiMessage(it))
                 },
             )
+        }
+    }
+
+    private fun collectUiEvents() {
+        viewModelScope.launch {
+            event.collect { articlesUiEvent ->
+                when (articlesUiEvent) {
+                    is ArticlesUiEvent.SetSelectedArticleIndex -> {
+                        selectedArticleIndex.value = articlesUiEvent.index
+                        isArticleDetailOpen.value = true
+                    }
+                    is ArticlesUiEvent.SetIsArticleDetailsOpen -> {
+                        isArticleDetailOpen.value = articlesUiEvent.isArticleDetailsOpen
+                    }
+                }
+
+            }
+        }
+    }
+
+    fun handleEvent(articlesUiEvent: ArticlesUiEvent) {
+        viewModelScope.launch {
+            event.emit(articlesUiEvent)
         }
     }
 }

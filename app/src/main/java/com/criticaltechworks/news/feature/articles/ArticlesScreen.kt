@@ -4,10 +4,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,17 +39,19 @@ import com.criticaltechworks.news.core.design.components.NewsAppTopBar
 import com.criticaltechworks.news.core.domain.model.Article
 import com.criticaltechworks.news.core.ui.UiEvent
 import com.criticaltechworks.news.core.ui.ext.toDisplayDataTime
-import com.criticaltechworks.news.feature.articles.ArticlesUiEvent.OnArticleClicked
+import com.criticaltechworks.news.feature.articles.ArticlesUiEvent.SetSelectedArticleIndex
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ArticlesScreen(
-    uiState: ArticlesUiState,
     modifier: Modifier = Modifier,
+    showTopAppBar: Boolean = true,
+    state: ArticlesUiState,
     handleEvent: (UiEvent) -> Unit,
+
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    uiState.message?.let { message ->
+    state.message?.let { message ->
         LaunchedEffect(message) {
             snackbarHostState.showSnackbar(message.message)
             // onMessageShown(message.id)
@@ -56,10 +61,12 @@ internal fun ArticlesScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
     Scaffold(
         topBar = {
-            NewsAppTopBar(
-                titleRes = string.app_name,
-                scrollBehavior = scrollBehavior,
-            )
+            if (showTopAppBar) {
+                NewsAppTopBar(
+                    titleRes = string.app_name,
+                    scrollBehavior = scrollBehavior,
+                )
+            }
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -69,13 +76,13 @@ internal fun ArticlesScreen(
         val contentModifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
 
-        if (uiState.isLoading) {
+        if (state.isLoading) {
             FullScreenLoading()
         } else {
             ArticleList(
                 modifier = contentModifier,
                 contentPadding = innerPadding,
-                articles = uiState.articles,
+                articles = state.articles,
                 handleEvent = handleEvent,
             )
         }
@@ -99,13 +106,15 @@ internal fun ArticleList(
     contentPadding: PaddingValues,
     articles: List<Article>,
     handleEvent: (UiEvent) -> Unit,
+    state: LazyListState = rememberLazyListState(),
 ) {
     LazyColumn(
         modifier = modifier,
+        state = state,
         contentPadding = contentPadding,
         content = {
             items(articles.size) { index ->
-                ArticleItem(article = articles[index], handleEvent = handleEvent)
+                ArticleItem(index = index, article = articles[index], handleEvent = handleEvent)
                 if (index < articles.size - 1) {
                     Divider(
                         modifier = Modifier.padding(horizontal = 14.dp),
@@ -119,7 +128,7 @@ internal fun ArticleList(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ArticleItem(article: Article, handleEvent: (UiEvent) -> Unit) {
+fun ArticleItem(index: Int, article: Article, handleEvent: (UiEvent) -> Unit) {
     ListItem(
         leadingContent = {
             AsyncImage(
@@ -130,7 +139,7 @@ fun ArticleItem(article: Article, handleEvent: (UiEvent) -> Unit) {
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(114.dp, 64.dp)
+                    .size(56.dp, 56.dp)
                     .clip(shape = MaterialTheme.shapes.small),
             )
         },
@@ -141,8 +150,10 @@ fun ArticleItem(article: Article, handleEvent: (UiEvent) -> Unit) {
                 style = MaterialTheme.typography.bodySmall,
             )
         },
-        modifier = Modifier.clickable {
-            handleEvent(OnArticleClicked(article))
-        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                handleEvent(SetSelectedArticleIndex(index))
+            },
     )
 }
