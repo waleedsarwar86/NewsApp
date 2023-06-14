@@ -12,7 +12,7 @@
 <img src="screenshots/1-articles.png" width="220"/>
 <img src="screenshots/2-article-details.png" width="220"/>
 
-## Landscape:
+### Landscape:
 <br/>
 <img src="screenshots/3-articles-with-details.png" width="450"/>
 
